@@ -6,15 +6,17 @@ from django.contrib.auth.models import User
 class SnippetSerializer(serializers.ModelSerializer):
 	"""docstring for SnippetSerializer"""
 	owner = serializers.ReadOnlyField(source='owner.username')
+	highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+	
 	class Meta:
 		model = Snippet
-		fields = ['id', 'title', 'code', 'linenos', 'language', 'style', 'owner'] #optimisation, problem aalways need instance of object 
+		fields = ['url', 'id', 'highlight', 'owner', 'title', 'code', 'linenos', 'language', 'style'] #optimisation, problem aalways need instance of object 
 																		 #n+1 problem, happens with lots of relationships
 
 
 class UserSerializer(serializers.ModelSerializer):
-	snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+	snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail', read_only=True)
 
 	class Meta:
 		model = User 
-		fields = ['id', 'username', 'snippets']
+		fields = ['url', 'id', 'username', 'snippets']
