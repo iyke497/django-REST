@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class SnippetSerializer(serializers.ModelSerializer):
 	"""docstring for SnippetSerializer"""
-	owner = serializers.ReadOnlyFeild(source='owner.username')
+	owner = serializers.ReadOnlyField(source='owner.username')
 	class Meta:
 		model = Snippet
 		fields = ['id', 'title', 'code', 'linenos', 'language', 'style', 'owner'] #optimisation, problem aalways need instance of object 
